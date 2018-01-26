@@ -5,7 +5,7 @@ var cheerio = require("cheerio");
 var bodyParser = require("body-parser")
 var mongoose = require('mongoose');
 var exphbs = require("express-handlebars");
-var titleCase = require("./utility/title-case")
+var titleCase = require("./utility/title-case");
 
 // Require all models
 var db = require("./models");
@@ -76,38 +76,12 @@ app.get("/scrape", function(req, res) {
                 // Error
                 .catch(function(err) {
                     console.log("Article previously added or missing data\nTitle: " + title + "\n");
+                    // return res.json(err);
                 });
         });
-    // Send a "Scrape Complete" message to the browser
-    res.send("Scrape Complete");
+        // Send a "Scrape Complete" message to the browser
+        res.send("Scrape Complete");
     });
-});
-
-// Route for retrieving all articles from the db
-app.get("/articles", function(req, res) {
-    db.Article.find({})
-        .populate("Comment")
-        // Success
-        .then(function(records) {
-            res.json(records)
-        })
-        // Error
-        .catch(function(err) {
-            res.json(err)
-        });
-});
-
-// Route for counting the number of articles in the database
-app.get("/count", function(req, res) {
-    db.Article.count()
-        // Success
-        .then(function(count) {
-            res.json({count: count})
-        })
-        // Error
-        .catch(function(err) {
-            res.json(err)
-        });
 });
 
 // Send any other url back to the index page

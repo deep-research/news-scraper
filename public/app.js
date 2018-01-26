@@ -3,7 +3,7 @@ $(document).ready(function() {
         $.ajax({
             url: "/scrape",
             type: 'GET',
-            success: function(data) {
+            success: function(response) {
                 // Reload the page to display the latest data
                 location.reload();
             }
