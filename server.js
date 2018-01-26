@@ -26,10 +26,10 @@ app.set("view engine", "handlebars");
 mongoose.Promise = Promise;
 mongoose.connect("mongodb://localhost/news");
 
-app.get("/index", function(req, res) {
+app.get("/index/:error?", function(req, res) {
     db.Article.find({})
         .sort('date_added')
-        .limit(15)
+        .limit(20)
         .populate("Comment")
         // Success
         .then(function(records) {
@@ -48,6 +48,9 @@ app.get("/scrape", function(req, res) {
     request("https://www.chicagotribune.com/news/feeds/", function(error, response, html) {
         // Load the html body from request into cheerio
         var $ = cheerio.load(html);
+
+        var articleCount = 0
+        $(".trb_outfit_group_list_item_body").each(function(i, element) {articleCount++})
         
         // For each story in the news feed
         $(".trb_outfit_group_list_item_body").each(function(i, element) {
@@ -71,16 +74,22 @@ app.get("/scrape", function(req, res) {
             db.Article.create(obj)
                 // Success
                 .then(function() {
-                    console.log("Article added successfully\nTitle: " + title + "\n")
+                    console.log(i + ": Article added successfully\nTitle: " + title + "\n")
+
+                    // Send a "Scrape Complete" message to the browser
+                    if (i === articleCount-1) {
+                        res.send("Scrape complete with no errors");
+                    } 
                 })
                 // Error
-                .catch(function(err) {
-                    console.log("Article previously added or missing data\nTitle: " + title + "\n");
-                    // return res.json(err);
+                .catch(function(err) {  
+                    console.log(i + ": Article previously added or missing data\nTitle: " + title + "\n");
+                    try {
+                        return res.send("Scrape complete with errors");
+                    } catch(error) {}
                 });
+            
         });
-        // Send a "Scrape Complete" message to the browser
-        res.send("Scrape Complete");
     });
 });
 

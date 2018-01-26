@@ -1,19 +1,22 @@
 <br>
 <div class="container">
-    <h2>News Scraper</h2>
+    <a href="/index"><h2 id="title-font" class="text-center">THE PAPER SCRAPER</h2></a>
     <br>
-    <button class="w3-button w3-teal" id="news-btn">Get News</button>
+    <div class="text-center"><button class="w3-button w3-teal" id="news-btn">Get News</button></div>
+    <p id="wait">&nbsp;</p>
     <br><br>
-    {{#each articles}}
-        <h3 id="{{this._id}}">{{this.headline}}</h3>
-        {{#if this.author}}<h4>By {{this.author}}</h4>{{/if}}
-        <h5>{{this.catagory}}</h5>
-        <p>{{this.summary}}</p>
-        <p><i>{{this.url}}</i></p>
-        <br>
-        <h5>Comments</h5>
-        <br>
-        <hr>
-        <br>
-    {{/each}}
+    <div id="articles">
+        {{#each articles}}
+            <a href="{{this.url}}" target="_blank"><h3 id="{{this._id}}">{{this.headline}}</h3></a>
+            {{#if this.author}}<h4>By {{this.author}}</h4>{{/if}}
+            <h5>{{this.catagory}}</h5>
+            <p class="summary">Summary: <i>"{{this.summary}}"</i></p>
+            <p>Source: <a href="{{this.url}}" target="_blank">The Chicago Tribune</a></p>
+            <br>
+            <h5>Comments</h5>
+            <br>
+            <hr>
+            <br>
+        {{/each}}
+    </div>
 </div>
