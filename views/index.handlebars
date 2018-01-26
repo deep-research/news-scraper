@@ -1,0 +1,19 @@
+<br>
+<div class="container">
+    <h2>News Scraper</h2>
+    <br>
+    <button class="w3-button w3-teal" id="news-btn">Get News</button>
+    <br><br>
+    {{#each articles}}
+        <h3 id="{{this._id}}">{{this.headline}}</h3>
+        {{#if this.author}}<h4>By {{this.author}}</h4>{{/if}}
+        <h5>{{this.catagory}}</h5>
+        <p>{{this.summary}}</p>
+        <p><i>{{this.url}}</i></p>
+        <br>
+        <h5>Comments</h5>
+        <br>
+        <hr>
+        <br>
+    {{/each}}
+</div>

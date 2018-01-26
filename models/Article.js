@@ -29,6 +29,10 @@ var ArticleSchema = new Schema({
         trim: true,
         required: "A url is required"
     },
+    date_added: {
+        type: Date,
+        default: Date.now
+    },
     comments: [
         {
             // Store ObjectIds in the array

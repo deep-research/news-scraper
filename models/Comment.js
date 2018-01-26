@@ -8,16 +8,19 @@ var CommentSchema = new Schema({
     title: {
         type: String,
         trim: true,
-        required: "A title is required",
-        unique: true
+        required: "A title is required"
     },
     body: {
         type: String,
         trim: true,
-        required: "A body is required",
-        unique: true
+        required: "A body is required"
     },
-    dateCreated: {
+    user: {
+        type: String,
+        trim: true,
+        required: "A body is required"
+    },
+    date_added: {
         type: Date,
         default: Date.now
     }

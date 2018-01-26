@@ -10,7 +10,7 @@ var titleCase = require("./utility/title-case")
 // Require all models
 var db = require("./models");
 
-// Initialize Expressand use the public folder
+// Initialize Express and use the public folder
 var app = express();
 app.use(express.static("public"));
 
@@ -22,15 +22,24 @@ app.use(bodyParser.json());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// Connect to the Mongo DB
+// Connect to the Mongoose
 mongoose.Promise = Promise;
 mongoose.connect("mongodb://localhost/news");
 
-app.get("/", function(req, res) {
-    res.send("Hello world");
+app.get("/index", function(req, res) {
+    db.Article.find({})
+        .sort('date_added')
+        .limit(15)
+        .populate("Comment")
+        // Success
+        .then(function(records) {
+            res.render('index', {articles: records});
+        })
+        // Error
+        .catch(function(err) {
+            res.json(err)
+        });
 });
-
-var scrapeErrors = false;
 
 // Scrape data from one site and place it into the mongodb db
 app.get("/scrape", function(req, res) {
@@ -69,14 +78,15 @@ app.get("/scrape", function(req, res) {
                     console.log("Article previously added or missing data\nTitle: " + title + "\n");
                 });
         });
-    });
     // Send a "Scrape Complete" message to the browser
     res.send("Scrape Complete");
+    });
 });
 
 // Route for retrieving all articles from the db
 app.get("/articles", function(req, res) {
-    db.Article.find()
+    db.Article.find({})
+        .populate("Comment")
         // Success
         .then(function(records) {
             res.json(records)
@@ -99,6 +109,11 @@ app.get("/count", function(req, res) {
             res.json(err)
         });
 });
+
+// Send any other url back to the index page
+app.get("/*", function(req, res) {
+    res.redirect("/index")
+})
 
 // Listen on port 3000
 app.listen(3000, function() {
