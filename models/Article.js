@@ -13,27 +13,21 @@ var ArticleSchema = new Schema({
     },
     author: {
         type: String,
-        trim: true,
-        required: "An author is required",
-        unique: true
+        trim: true
     },
     catagory: {
         type: String,
-        trim: true,
-        required: "An catagory is required",
-        unique: true
+        trim: true
     },
     summary: {
         type: String,
         trim: true,
-        required: "A summary is required",
-        unique: true
+        required: "A summary is required"
     },
     url: {
         type: String,
         trim: true,
-        required: "A url is required",
-        unique: true
+        required: "A url is required"
     },
     comments: [
         {

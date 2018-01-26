@@ -1,11 +1,11 @@
 // Dependencies
 var express = require("express");
-var mongojs = require("mongojs");
 var request = require("request");
 var cheerio = require("cheerio");
 var bodyParser = require("body-parser")
 var mongoose = require('mongoose');
 var exphbs = require("express-handlebars");
+var titleCase = require("./utility/title-case")
 
 // Require all models
 var db = require("./models");
@@ -22,30 +22,82 @@ app.use(bodyParser.json());
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-// Database configuration
-var databaseUrl = "news";
-var collections = ["Article", "Comment"];
-
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-    console.log("Database Error:", error);
-});
-
-// Initialize mongoose
-// mongoose.connect('mongodb://localhost/news');
-// var db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//     console.log("Mongoose is connected")
-// });
-
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
 mongoose.connect("mongodb://localhost/news");
 
 app.get("/", function(req, res) {
     res.send("Hello world");
+});
+
+var scrapeErrors = false;
+
+// Scrape data from one site and place it into the mongodb db
+app.get("/scrape", function(req, res) {
+
+    // Make a request for the news section of the Chicago Tribune
+    request("https://www.chicagotribune.com/news/feeds/", function(error, response, html) {
+        // Load the html body from request into cheerio
+        var $ = cheerio.load(html);
+        
+        // For each story in the news feed
+        $(".trb_outfit_group_list_item_body").each(function(i, element) {
+            // Extract the data
+            var title = $(element).find(".trb_outfit_relatedListTitle").text().trim();
+            var link = "http://www.chicagotribune.com" + $(element).find(".trb_outfit_relatedListTitle_a").attr("href").trim();
+            var summary = $(element).find(".trb_outfit_group_list_item_brief").text().trim();
+            var catagory = $(element).find(".trb_outfit_categorySectionHeading_a").text().trim();
+            var author = titleCase($(element).find(".trb_bylines_nm_au").text().toLowerCase().trim());
+
+            // Create an object from the data
+            var obj = {
+                headline: title,
+                url: link,
+                summary: summary,
+                catagory: catagory,
+                author: author
+            }
+
+            // Send new articles to the database
+            db.Article.create(obj)
+                // Success
+                .then(function() {
+                    console.log("Article added successfully\nTitle: " + title + "\n")
+                })
+                // Error
+                .catch(function(err) {
+                    console.log("Article previously added or missing data\nTitle: " + title + "\n");
+                });
+        });
+    });
+    // Send a "Scrape Complete" message to the browser
+    res.send("Scrape Complete");
+});
+
+// Route for retrieving all articles from the db
+app.get("/articles", function(req, res) {
+    db.Article.find()
+        // Success
+        .then(function(records) {
+            res.json(records)
+        })
+        // Error
+        .catch(function(err) {
+            res.json(err)
+        });
+});
+
+// Route for counting the number of articles in the database
+app.get("/count", function(req, res) {
+    db.Article.count()
+        // Success
+        .then(function(count) {
+            res.json({count: count})
+        })
+        // Error
+        .catch(function(err) {
+            res.json(err)
+        });
 });
 
 // Listen on port 3000
