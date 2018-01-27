@@ -10,7 +10,7 @@ var CommentSchema = new Schema({
         trim: true,
         required: "A title is required"
     },
-    body: {
+    comment: {
         type: String,
         trim: true,
         required: "A body is required"

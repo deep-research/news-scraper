@@ -1,19 +1,46 @@
 <br>
 <div class="container">
-    <a href="/index"><h2 id="title-font" class="text-center">THE PAPER SCRAPER</h2></a>
+    <a href="/index"><h2 id="title-font" class="text-center" title="Refresh the page">THE PAPER SCRAPER!</h2></a>
     <br>
     <div class="text-center"><button class="w3-button w3-teal" id="news-btn">Get News</button></div>
     <p id="wait">&nbsp;</p>
-    <br><br>
+    {{#if count}}<p>Articles found: {{this.count}}</p>{{/if}}
+    {{#if articles}}
+        <select class="custom-select" id="select-limit">
+            <option selected disabled>Display limit</option>
+            <option value="25">25 (default)</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="none">No limit</option>
+        </select>
+    {{/if}}
+    <br>
+    <br>
     <div id="articles">
         {{#each articles}}
-            <a href="{{this.url}}" target="_blank"><h3 id="{{this._id}}">{{this.headline}}</h3></a>
+            <a href="{{this.url}}" target="_blank"><h3>{{this.headline}}</h3></a>
             {{#if this.author}}<h4>By {{this.author}}</h4>{{/if}}
-            <h5>{{this.catagory}}</h5>
+            <h5 class="catagory">{{this.catagory}}</h5>
             <p class="summary">Summary: <i>"{{this.summary}}"</i></p>
             <p>Source: <a href="{{this.url}}" target="_blank">The Chicago Tribune</a></p>
             <br>
-            <h5>Comments</h5>
+            <h5 style="margin-bottom: 15px;" class="show-form">Add a comment</h5>
+            <form class="comment-form" article-id="{{this._id}}">
+                <div style="margin-bottom: 10px;">
+                    <input type="text" class="form-control comment-input" placeholder="Subject" id="title" required>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <input type="text" class="form-control comment-input" placeholder="Your Name" id="name" required>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <textarea type="text" class="form-control comment-input" placeholder="Comment" rows="3" id="comment" required></textarea>
+                </div>
+                <div>
+                    <input type="submit" value="Submit" class="comment-btn">  
+                </div>
+                <br>
+            </form>
+            <h5 style="margin-bottom: 15px;" class="show-comments" collapsed="false"  article-id="{{this._id}}">Display comments</h5>
             <br>
             <hr>
             <br>

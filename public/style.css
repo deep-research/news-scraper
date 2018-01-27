@@ -18,8 +18,10 @@ hr {
     text-shadow: 2px 2px #ff1e1e;
 }
 
-button {
+#news-btn {
     transition: background-color 0.5s ease;
+    border-radius: 3px;
+    opacity: .8;
 }
 
 h3 {
@@ -31,5 +33,35 @@ h3 {
 }
 
 #wait {
-    color: rgb(67, 67, 170);
+    color: rgb(67, 67, 172);
+}
+
+h5 {
+    color: rgb(88, 88, 88);
+}
+
+.comment-btn {
+    background: #0066A2;
+    color: white;
+    border-style: none;
+    height: 35px;
+    width: 90px;
+    border-radius: 2px;
+    margin-left: 1px;
+}
+
+.comment-btn:hover {
+    opacity: .8;
+}
+
+.comment-form { 
+    display: none;
+}
+
+.show-form:hover, .show-comments:hover {
+    color: rgb(0, 90, 60);
+}
+
+.comment-input {
+    max-width: 500px;
 }
