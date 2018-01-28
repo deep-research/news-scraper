@@ -54,13 +54,15 @@ $(document).ready(function() {
 
         $(this).slideToggle("200");
 
+        var commentObj = {
+            title: title,
+            user: name,
+            comment: comment,
+            id: articleId
+        }
+
         $.ajax({
-            data: {
-                title: title,
-                user: name,
-                comment: comment,
-                _id: articleId
-            },
+            data: commentObj,
             url: "/comment",
             type: "POST"
         }).done(function(response) {
@@ -70,22 +72,28 @@ $(document).ready(function() {
 
     $(".show-comments").click(function() {
         var articleId = $(this).attr("article-id")
-        console.log(articleId)
+
         if ($(this).attr("collapsed") === "false") {
             $(this).attr("collapsed", "true")
 
-            // $.ajax({
-            //     url: "/comment/" + articleId,
-            //     type: "GET"
-            // }).done(function(response) {
-            //     console.log(response)
-            // })            
-        } else {
+            // $(this).next("form").slideToggle("200");
+            // $('html, body').animate({
+            //     scrollTop: ($(this).prev().offset().top)
+            // }, 500);           
+        } else if ($(this).attr("collapsed") === "true") {
             $(this).attr("collapsed", "false")
+            $.ajax({
+                url: "/comment/" + articleId,
+                type: "GET"
+            }).done(function(response) {
+                var commentArray = response.comments;
+            }) 
+
+            // $(this).next("form").slideToggle("200");
+            // $('html, body').animate({
+            //     scrollTop: ($(this).prev().offset().top)
+            // }, 500);    
         }
-        // $(this).next("form").slideToggle("200"); 
-        // $('html, body').animate({
-        //     scrollTop: ($(this).prev().offset().top)
-        // }, 500);  
+
     });
 });

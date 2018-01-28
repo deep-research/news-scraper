@@ -13,12 +13,12 @@ var CommentSchema = new Schema({
     comment: {
         type: String,
         trim: true,
-        required: "A body is required"
+        required: "A comment is required"
     },
     user: {
         type: String,
         trim: true,
-        required: "A body is required"
+        required: "A name is required"
     },
     date_added: {
         type: Date,

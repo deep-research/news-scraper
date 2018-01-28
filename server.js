@@ -32,9 +32,9 @@ mongoose.connect(MONGODB_URI);
 
 app.get("/index/:error?", function(req, res) {
     db.Article.find({})
-        .sort('date_added')
+        .sort({'date_added': -1})
         .limit(25)
-        .populate("Comment")
+        // .populate("Comment")
         // Success
         .then(function(records) {
             var displayCount = records.length;
@@ -81,9 +81,9 @@ app.get("/index/limit/:value", function(req, res) {
 
     if (Number.isInteger(displayLimit)) {
         db.Article.find({})
-            .sort('date_added')
+            .sort({'date_added': -1})
             .limit(displayLimit)
-            .populate("Comment")
+            // .populate("Comment")
             // Success
             .then(function(records) {
                 var displayCount = records.length;
@@ -99,8 +99,8 @@ app.get("/index/limit/:value", function(req, res) {
             });
     } else {
         db.Article.find({})
-            .sort('date_added')
-            .populate("Comment")
+            .sort({'date_added': -1})
+            // .populate("Comment")
             // Success
             .then(function(records) {
                 var displayCount = records.length;
@@ -201,12 +201,18 @@ app.get("/scrape", function(req, res) {
 
 // Create a new comment in the db
 app.post("/comment", function(req, res) {
+    var commentObj = {
+        title: req.body.title,
+        comment: req.body.comment,
+        user: req.body.user
+    }
+
     db.Comment.create(req.body)
       .then(function(dbComment) {
         // If a Note was created successfully, find one article (there's only one) and push the new comment's _id to the article's `comments` array
         // { new: true } tells the query that we want it to return the updated article -- it returns the original by default
         // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-        return db.Article.findOneAndUpdate({}, { $push: { comments: dbComment._id } }, { new: true });
+        return db.Article.findOneAndUpdate({"_id": req.body.id}, { $push: { comments: dbComment._id } }, { new: true });
       })
       .then(function(dbArticle) {
         // If the Article was updated successfully, send it back to the client
@@ -217,6 +223,23 @@ app.post("/comment", function(req, res) {
         res.json(err);
       });
   });
+
+app.get("/comment/:id", function(req, res) {
+    var commentId = req.params.id;
+
+    db.Article.findOne({"_id": commentId})
+        // Specify that we want to populate the retrieved users with any associated notes
+        .populate("comments")
+        .then(function(dbArticle) {
+        // If able to successfully find and associate all Users and Notes, send them back to the client
+            res.json(dbArticle);
+        })
+        .catch(function(err) {
+        // If an error occurs, send it back to the client
+            res.json(err);
+    });
+})
+
 
 // Send any other url back to the index page
 app.get("/*", function(req, res) {
