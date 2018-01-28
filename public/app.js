@@ -82,7 +82,7 @@ $(document).ready(function() {
 
             commentDisplay.slideToggle("200");
             $('html, body').animate({
-                scrollTop: (commentDisplay.prev().offset().top)
+                scrollTop: (commentDisplay.prev().offset().top -67.5)
             }, 500);
             
             commentDisplay.html("");
@@ -122,9 +122,8 @@ $(document).ready(function() {
                         commentDisplay.slideToggle("200");
 
                         $('html, body').animate({
-                            scrollTop: (commentDisplay.prev().offset().top)
+                            scrollTop: (commentDisplay.prev().offset().top -67.5)
                         }, 500);
-
                     }
                 }
             })    
