@@ -71,29 +71,63 @@ $(document).ready(function() {
     });
 
     $(".show-comments").click(function() {
-        var articleId = $(this).attr("article-id")
+        var showComments = $(this);
+        var commentDisplay = $(this).next(".comment-display");
+        
+        var articleId = showComments.attr("article-id");
 
-        if ($(this).attr("collapsed") === "false") {
-            $(this).attr("collapsed", "true")
+        // If it's open
+        if (commentDisplay.attr("collapsed") === "true") {
+            commentDisplay.attr("collapsed", "false");
 
-            // $(this).next("form").slideToggle("200");
-            // $('html, body').animate({
-            //     scrollTop: ($(this).prev().offset().top)
-            // }, 500);           
-        } else if ($(this).attr("collapsed") === "true") {
-            $(this).attr("collapsed", "false")
+            commentDisplay.slideToggle("200");
+            $('html, body').animate({
+                scrollTop: (commentDisplay.prev().offset().top)
+            }, 500);
+            
+            commentDisplay.html("");
+
+        // If it's closed
+        } else {
+            
             $.ajax({
                 url: "/comment/" + articleId,
                 type: "GET"
             }).done(function(response) {
                 var commentArray = response.comments;
-            }) 
 
-            // $(this).next("form").slideToggle("200");
-            // $('html, body').animate({
-            //     scrollTop: ($(this).prev().offset().top)
-            // }, 500);    
+                for (var i=0; i<commentArray.length; i++) {
+                    var title = commentArray[i].title;
+                    var user = commentArray[i].user;
+                    var comment = commentArray[i].comment;
+
+                    if (i < commentArray.length-1) {
+                        commentDisplay.append(
+                            "<p>Title: "+ title + "</p>" +
+                            "<p>User: "+ user + "</p>" +
+                            "<p>Comment: "+ comment + "</p>" +
+                            "<br>"
+                        )
+                    };
+
+                    if (i === commentArray.length-1) {
+                        commentDisplay.append(
+                            "<p>Title: "+ title + "</p>" +
+                            "<p>User: "+ user + "</p>" +
+                            "<p>Comment: "+ comment + "</p>"
+                        )
+
+                        commentDisplay.attr("collapsed", "true");
+
+                        commentDisplay.slideToggle("200");
+
+                        $('html, body').animate({
+                            scrollTop: (commentDisplay.prev().offset().top)
+                        }, 500);
+
+                    }
+                }
+            })    
         }
-
     });
 });

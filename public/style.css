@@ -54,7 +54,7 @@ h5 {
     opacity: .8;
 }
 
-.comment-form { 
+.comment-form, .comment-display { 
     display: none;
 }
 
