@@ -38,4 +38,4 @@ A full stack web application for scraping and commenting on articles from the Ch
 
 ## Comments
 
-* This project was a lot of fun. The asynchronous database queries for the scraper were in a loop, so I had to figure out some clever ways to count them. Writing the jQuery was also very fun. Getting the comment related sections to collapse properly took a surprising amount of trickery.
+* This project was a lot of fun. The asynchronous database queries for the scraper were in a loop, so I had to figure out some clever ways to count them. Writing the jQuery was also very enjoyable. Getting the comment related sections to collapse properly took a surprising amount of trickery.
