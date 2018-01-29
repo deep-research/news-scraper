@@ -113,12 +113,25 @@ $(document).ready(function() {
             }).done(function(response) {
                 var commentArray = response.comments;
 
+                if (commentArray.length === 0) {
+                    commentDisplay.html("<p>There are no comments yet.</p>");
+
+                    // Change the state and open the section
+                    commentDisplay.attr("collapsed", "true");
+                    commentDisplay.slideToggle("200");
+
+                    // Scroll to top of the section
+                    $('html, body').animate({
+                        scrollTop: (commentDisplay.prev().offset().top -67.5)
+                    }, 500);
+                }
+
                 // Extract the comment data in a loop
                 for (var i=0; i<commentArray.length; i++) {
                     var title = commentArray[i].title;
                     var user = commentArray[i].user;
                     var comment = commentArray[i].comment;
-                    var commentId = commentArray[i]._id
+                    var commentId = commentArray[i]._id;
 
                     // Display the comments on the web page
                     if (i < commentArray.length-1) {
