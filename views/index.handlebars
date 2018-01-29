@@ -25,7 +25,7 @@
             <p>Source: <a href="{{this.url}}" target="_blank">The Chicago Tribune</a></p>
             <br>
             <h5 style="margin-bottom: 15px;" class="show-form" article-id="{{this._id}}">Add a comment</h5>
-            <form class="comment-form" article-id="{{this._id}}">
+            <form class="comment-form" article-id="{{this._id}}" collapsed="false">
                 <div style="margin-bottom: 10px;">
                     <input type="text" class="form-control comment-input" placeholder="Subject" id="title" required>
                 </div>
@@ -36,7 +36,7 @@
                     <textarea type="text" class="form-control comment-input" placeholder="Comment" rows="3" id="comment" required></textarea>
                 </div>
                 <div>
-                    <input type="submit" value="Submit" class="comment-btn">  
+                    <input type="submit" value="Submit" class="comment-btn">
                 </div>
                 <br>
             </form>

@@ -39,6 +39,24 @@ $(document).ready(function() {
 
     // Toggle the comment form
     $(".show-form").click(function() {
+        var articleId = $(this).attr("article-id")
+        var showCommentsState = $(".show-comments[article-id='" + articleId + "']").attr("collapsed");
+        var showComments = $(".show-comments[article-id='" + articleId + "']");
+        var commentDisplay = $(".comment-display[article-id='" + articleId + "']");
+
+        if (showCommentsState === "true") {
+            showComments.attr("collapsed", "false");
+            commentDisplay.slideToggle("200");
+        }
+
+        var commentForm =  $(".comment-form[article-id='" + articleId + "']");
+
+        if ($(commentForm).attr("collapsed") === "true") {
+            $(commentForm).attr("collapsed", "false");
+        } else if ($(commentForm).attr("collapsed") === "false") {
+            $(commentForm).attr("collapsed", "true");
+        }
+
         $(this).next("form").slideToggle("200");
         
         // Scroll to the top of the form
@@ -55,7 +73,17 @@ $(document).ready(function() {
         var title = $(this).find("#title").val();
         var name = $(this).find("#name").val();
         var comment = $(this).find("#comment").val();
+
         var articleId = $(this).attr("article-id");
+
+        var showCommentsState = $(".show-comments[article-id='" + articleId + "']").attr("collapsed");
+        var showComments = $(".show-comments[article-id='" + articleId + "']");
+        var commentDisplay = $(".comment-display[article-id='" + articleId + "']");
+
+        if (showCommentsState === "true") {
+            showComments.attr("collapsed", "false");
+            commentDisplay.slideToggle("200");
+        }
 
         // Reset the form
         $(this).find("#title").val("");
@@ -63,6 +91,7 @@ $(document).ready(function() {
         $(this).find("#comment").val("");
 
         // Close the form
+        $(this).attr("collapsed", "false")
         $(this).slideToggle("200");
 
         // Prepare an object to send
@@ -106,12 +135,26 @@ $(document).ready(function() {
 
         // If it's closed
         } else {
+            var commentForm = $(".comment-form[article-id='" + articleId + "']");
+            // var showForm = $(".show-form[article-id='" + articleId + "']");
+
+            if (commentForm.attr("collapsed") === "true") {
+                // Reset the form
+                $(commentForm).find("#title").val("");
+                $(commentForm).find("#name").val("");
+                $(commentForm).find("#comment").val("");
+    
+                commentForm.attr("collapsed", "false");
+                commentForm.slideToggle("200");
+            }
+
             // Do a query for the comment data
             $.ajax({
                 url: "/comment/" + articleId,
                 type: "GET"
             }).done(function(response) {
                 var commentArray = response.comments;
+                commentDisplay.html("")
 
                 if (commentArray.length === 0) {
                     commentDisplay.html("<p>There are no comments yet.</p>");
