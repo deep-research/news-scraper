@@ -1,6 +1,6 @@
 # news-scraper
 
-A full stack web application for scraping and commenting on articles from the Chicago Tribune newspaper. The data is stored in Mongo DB with the Mongoose framework.
+A full stack web application for scraping and commenting on articles from the Chicago Tribune newspaper. The data is stored in Mongo DB with the Mongoose framework.  
 [The Paper Scraper](https://the-paper-scraper.herokuapp.com/)
 
 ## Installing
