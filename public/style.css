@@ -65,3 +65,7 @@ h5 {
 .comment-input {
     max-width: 500px;
 }
+
+.remove-comment {
+    cursor: pointer
+}

@@ -238,7 +238,28 @@ app.get("/comment/:id", function(req, res) {
         // If an error occurs, send it back to the client
             res.json(err);
     });
-})
+});
+
+// Remove a comment from the database
+app.delete("/comment/remove", function(req, res) {
+    var commentId = req.query.commentId;
+    var articleId = req.query.articleId;
+
+    // Find and remove the comment
+    db.Comment.findOneAndRemove({ "_id": commentId }, function (err, response) {
+        if (err) throw err;
+
+        // Find and remove the article reference
+        db.Article.update(
+            { "_id": articleId },
+            { "$pull": { "comments": commentId } },
+            function (err, response){
+                if (err) throw err;
+                res.json(response);
+            }
+        );
+    });
+});
 
 
 // Send any other url back to the index page
