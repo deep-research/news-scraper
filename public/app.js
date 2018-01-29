@@ -126,7 +126,7 @@ $(document).ready(function() {
 
     // Display the comment section
     $(".show-comments").click(function() {
-        // html element addresses
+        // find html elements
         var showComments = $(this);
         var commentDisplay = $(this).next(".comment-display");       
         var articleId = showComments.attr("article-id");
@@ -186,6 +186,7 @@ $(document).ready(function() {
                         $('html, body').animate({
                             scrollTop: (commentDisplay.prev().offset().top -67.5)
                         }, 500);
+
                     } else {
                     // Scroll instuctions if the comment form wasn't closed
                         $('html, body').animate({
@@ -222,19 +223,29 @@ $(document).ready(function() {
                             "<p>Title: <b>"+ title + "</b></p>" +
                             "<p>User: <u>"+ user + "</u></p>" +
                             "<p>Comment: <i>"+ comment + "</i></p>" +
-                            "<p>Delete: <i class='fa fa-window-close remove-comment' " +
+                            "<p>Delete: <a href='javascript:;'>" +
+                            "<i class='fa fa-window-close remove-comment' " +
                             "comment-id='" + commentId + "' article-id='" + articleId + "'" +
-                            " aria-hidden='true'></i></p>"
+                            " aria-hidden='true'></i></a></p>"
                         )
 
                         // Change the state and open the section
                         showComments.attr("collapsed", "true");
                         commentDisplay.slideToggle("200");
 
-                        // Scroll to top of the section
-                        $('html, body').animate({
-                            scrollTop: (commentDisplay.prev().offset().top -67.5)
-                        }, 500);
+                        // Scroll instructions if the comment form was closed
+                        if (formWasClosed === false) {
+                            // Scroll to top of the section
+                            $('html, body').animate({
+                                scrollTop: (commentDisplay.prev().offset().top -67.5)
+                            }, 500);
+
+                        } else {
+                        // Scroll instuctions if the comment form wasn't closed
+                            $('html, body').animate({
+                                scrollTop: (commentDisplay.prev().offset().top -260)
+                            }, 500);
+                        }
                     }
                 }
             })    
