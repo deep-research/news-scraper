@@ -203,31 +203,24 @@ $(document).ready(function() {
                     var comment = commentArray[i].comment;
                     var commentId = commentArray[i]._id;
 
+                    var commentAppend = (
+                        "<p>" + (i+1) + ". <b>"+ title + "</b>&nbsp;&nbsp;" +
+                        "<a href='javascript:;'>" +
+                        "<i class='fa fa-window-close remove-comment' " +
+                        "comment-id='" + commentId + "' article-id='" + articleId + "'" +
+                        " aria-hidden='true'></i></a></p>" +
+                        "<p>Username: " + user + "</p>" +
+                        "<p>Comment: <i>&quot;"+ comment + "&quot;</i></p>"
+                    )
+
                     // Display the comments on the web page
                     if (i < commentArray.length-1) {
-                        commentDisplay.append(
-                            "<p>Title: <b>"+ title + "</b></p>" +
-                            "<p>User: <u>" + user + "</u></p>" +
-                            "<p>Comment: <i>"+ comment + "</i></p>" +
-                            "<p>Delete: <a href='javascript:;'>" +
-                            "<i class='fa fa-window-close remove-comment' " +
-                            "comment-id='" + commentId + "' article-id='" + articleId + "'" +
-                            " aria-hidden='true'></i></a></p>" +
-                            "<br>"
-                        )
+                        commentDisplay.append(commentAppend + "<br>")
                     };
 
                     // No <br> on the last comment
                     if (i === commentArray.length-1) {
-                        commentDisplay.append(
-                            "<p>Title: <b>"+ title + "</b></p>" +
-                            "<p>User: <u>"+ user + "</u></p>" +
-                            "<p>Comment: <i>"+ comment + "</i></p>" +
-                            "<p>Delete: <a href='javascript:;'>" +
-                            "<i class='fa fa-window-close remove-comment' " +
-                            "comment-id='" + commentId + "' article-id='" + articleId + "'" +
-                            " aria-hidden='true'></i></a></p>"
-                        )
+                        commentDisplay.append(commentAppend)
 
                         // Change the state and open the section
                         showComments.attr("collapsed", "true");
