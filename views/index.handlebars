@@ -24,7 +24,7 @@
             <p class="summary">Summary: <i>"{{this.summary}}"</i></p>
             <p>Source: <a href="{{this.url}}" target="_blank">The Chicago Tribune</a></p>
             <br>
-            <h5 style="margin-bottom: 15px;" class="show-form">Add a comment</h5>
+            <h5 style="margin-bottom: 15px;" class="show-form" article-id="{{this._id}}">Add a comment</h5>
             <form class="comment-form" article-id="{{this._id}}">
                 <div style="margin-bottom: 10px;">
                     <input type="text" class="form-control comment-input" placeholder="Subject" id="title" required>
@@ -41,7 +41,7 @@
                 <br>
             </form>
             <h5 style="margin-bottom: 15px;" class="show-comments" collapsed="false"  article-id="{{this._id}}">Display comments</h5>
-            <div class="comment-display"></div>
+            <div class="comment-display" article-id="{{this._id}}"></div>
             <br>
             <hr>
             <br>

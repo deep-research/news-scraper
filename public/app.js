@@ -91,9 +91,9 @@ $(document).ready(function() {
         var articleId = showComments.attr("article-id");
 
         // If it's open
-        if (commentDisplay.attr("collapsed") === "true") {
+        if (showComments.attr("collapsed") === "true") {
             // Change the state
-            commentDisplay.attr("collapsed", "false");
+            showComments.attr("collapsed", "false");
 
             // Close the section and scroll to the top of it
             commentDisplay.slideToggle("200");
@@ -117,7 +117,7 @@ $(document).ready(function() {
                     commentDisplay.html("<p>There are no comments yet.</p>");
 
                     // Change the state and open the section
-                    commentDisplay.attr("collapsed", "true");
+                    showComments.attr("collapsed", "true");
                     commentDisplay.slideToggle("200");
 
                     // Scroll to top of the section
@@ -159,7 +159,7 @@ $(document).ready(function() {
                         )
 
                         // Change the state and open the section
-                        commentDisplay.attr("collapsed", "true");
+                        showComments.attr("collapsed", "true");
                         commentDisplay.slideToggle("200");
 
                         // Scroll to top of the section
@@ -183,7 +183,7 @@ $(document).ready(function() {
         }).done(function(response) {
             // console.log(response)
 
-            $(".show-comments").trigger("click");
+            $(".show-comments[article-id='" + articleId + "']").trigger("click");
         })
     })
 });
