@@ -42,25 +42,30 @@ $(document).ready(function() {
         var articleId = $(this).attr("article-id");
         var commentForm =  $(".comment-form[article-id='" + articleId + "']");
 
+        // Make sure the form is cleared
         $(commentForm).find("#title").val("");
         $(commentForm).find("#name").val("");
         $(commentForm).find("#comment").val("");
 
+        // Find comment section elements
         var showCommentsState = $(".show-comments[article-id='" + articleId + "']").attr("collapsed");
         var showComments = $(".show-comments[article-id='" + articleId + "']");
         var commentDisplay = $(".comment-display[article-id='" + articleId + "']");
 
+        // Close the comment display if it's open
         if (showCommentsState === "true") {
             showComments.attr("collapsed", "false");
             commentDisplay.slideToggle("200");
         }
 
+        // Change the collapsed state
         if ($(commentForm).attr("collapsed") === "true") {
             $(commentForm).attr("collapsed", "false");
         } else if ($(commentForm).attr("collapsed") === "false") {
             $(commentForm).attr("collapsed", "true");
         }
 
+        // Toggle the form
         $(this).next("form").slideToggle("200");
         
         // Scroll to the top of the form
@@ -80,10 +85,13 @@ $(document).ready(function() {
 
         var articleId = $(this).attr("article-id");
 
+
+        // Find the comment section elements
         var showCommentsState = $(".show-comments[article-id='" + articleId + "']").attr("collapsed");
         var showComments = $(".show-comments[article-id='" + articleId + "']");
         var commentDisplay = $(".comment-display[article-id='" + articleId + "']");
 
+        // Close the comment display if it's collapsed
         if (showCommentsState === "true") {
             showComments.attr("collapsed", "false");
             commentDisplay.slideToggle("200");
@@ -147,10 +155,12 @@ $(document).ready(function() {
                 $(commentForm).find("#title").val("");
                 $(commentForm).find("#name").val("");
                 $(commentForm).find("#comment").val("");
-    
+
+                // Close the comment form
                 commentForm.attr("collapsed", "false");
                 commentForm.slideToggle("200");
 
+                // Report the action
                 formWasClosed = true;
             }
 
@@ -162,6 +172,7 @@ $(document).ready(function() {
                 var commentArray = response.comments;
                 commentDisplay.html("")
 
+                // Message if nothing was found
                 if (commentArray.length === 0) {
                     commentDisplay.html("<p>There are no comments yet.</p>");
 
@@ -169,12 +180,14 @@ $(document).ready(function() {
                     showComments.attr("collapsed", "true");
                     commentDisplay.slideToggle("200");
 
+                    // Scroll instructions if the comment form was closed
                     if (formWasClosed === false) {
                         // Scroll to top of the section
                         $('html, body').animate({
                             scrollTop: (commentDisplay.prev().offset().top -67.5)
                         }, 500);
                     } else {
+                    // Scroll instuctions if the comment form wasn't closed
                         $('html, body').animate({
                             scrollTop: (commentDisplay.prev().offset().top -260)
                         }, 500);
@@ -183,6 +196,7 @@ $(document).ready(function() {
 
                 // Extract the comment data in a loop
                 for (var i=0; i<commentArray.length; i++) {
+                    // Comment data
                     var title = commentArray[i].title;
                     var user = commentArray[i].user;
                     var comment = commentArray[i].comment;
@@ -238,6 +252,7 @@ $(document).ready(function() {
         }).done(function(response) {
             // console.log(response)
 
+            // Click to close if a comment is deleted
             $(".show-comments[article-id='" + articleId + "']").trigger("click");
         })
     })

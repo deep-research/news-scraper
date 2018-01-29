@@ -30,14 +30,15 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news";
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
+// Regular scraping route with error message functionality
 app.get("/index/:error?", function(req, res) {
     db.Article.find({})
         .sort({'date_added': -1})
         .limit(25)
-        // .populate("Comment")
         // Success
         .then(function(records) {
             var displayCount = records.length;
+            // If the scrape works for every article
             if (req.params.error === "success") {
                 var successObj = {
                     articles: records,
@@ -47,6 +48,7 @@ app.get("/index/:error?", function(req, res) {
                     successObj.count = displayCount;
                 }
                 res.render('index', successObj);
+            // If there are duplicates in the database
             } else if (req.params.error === "error") {
                 var errorObj = {
                     articles: records,
@@ -56,6 +58,7 @@ app.get("/index/:error?", function(req, res) {
                     errorObj.count = displayCount;
                 }
                 res.render('index', errorObj);
+            // No error message
             } else {
                 var regularObj =  {
                     articles: records
@@ -72,6 +75,7 @@ app.get("/index/:error?", function(req, res) {
         });
 });
 
+// Display limit for articles
 app.get("/index/limit/:value", function(req, res) {
     var displayLimit =  req.params.value
 
@@ -79,11 +83,11 @@ app.get("/index/limit/:value", function(req, res) {
     else if (displayLimit === "50") {displayLimit = 50}
     else if (displayLimit === "100") {displayLimit = 100}
 
+    // A numerical limit
     if (Number.isInteger(displayLimit)) {
         db.Article.find({})
             .sort({'date_added': -1})
             .limit(displayLimit)
-            // .populate("Comment")
             // Success
             .then(function(records) {
                 var displayCount = records.length;
@@ -97,10 +101,10 @@ app.get("/index/limit/:value", function(req, res) {
             .catch(function(err) {
                 res.json(err)
             });
+    // No display limit
     } else {
         db.Article.find({})
             .sort({'date_added': -1})
-            // .populate("Comment")
             // Success
             .then(function(records) {
                 var displayCount = records.length;
@@ -224,18 +228,16 @@ app.post("/comment", function(req, res) {
       });
   });
 
+  // Display any comments associated with an article
 app.get("/comment/:id", function(req, res) {
     var commentId = req.params.id;
 
     db.Article.findOne({"_id": commentId})
-        // Specify that we want to populate the retrieved users with any associated notes
         .populate("comments")
         .then(function(dbArticle) {
-        // If able to successfully find and associate all Users and Notes, send them back to the client
             res.json(dbArticle);
         })
         .catch(function(err) {
-        // If an error occurs, send it back to the client
             res.json(err);
     });
 });
