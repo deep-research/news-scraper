@@ -39,7 +39,13 @@ $(document).ready(function() {
 
     // Toggle the comment form
     $(".show-form").click(function() {
-        var articleId = $(this).attr("article-id")
+        var articleId = $(this).attr("article-id");
+        var commentForm =  $(".comment-form[article-id='" + articleId + "']");
+
+        $(commentForm).find("#title").val("");
+        $(commentForm).find("#name").val("");
+        $(commentForm).find("#comment").val("");
+
         var showCommentsState = $(".show-comments[article-id='" + articleId + "']").attr("collapsed");
         var showComments = $(".show-comments[article-id='" + articleId + "']");
         var commentDisplay = $(".comment-display[article-id='" + articleId + "']");
@@ -48,8 +54,6 @@ $(document).ready(function() {
             showComments.attr("collapsed", "false");
             commentDisplay.slideToggle("200");
         }
-
-        var commentForm =  $(".comment-form[article-id='" + articleId + "']");
 
         if ($(commentForm).attr("collapsed") === "true") {
             $(commentForm).attr("collapsed", "false");
@@ -134,9 +138,9 @@ $(document).ready(function() {
             commentDisplay.html("");
 
         // If it's closed
-        } else {
+        } else if (showComments.attr("collapsed") === "false"){
             var commentForm = $(".comment-form[article-id='" + articleId + "']");
-            // var showForm = $(".show-form[article-id='" + articleId + "']");
+            var formWasClosed = false;
 
             if (commentForm.attr("collapsed") === "true") {
                 // Reset the form
@@ -146,6 +150,8 @@ $(document).ready(function() {
     
                 commentForm.attr("collapsed", "false");
                 commentForm.slideToggle("200");
+
+                formWasClosed = true;
             }
 
             // Do a query for the comment data
@@ -163,10 +169,16 @@ $(document).ready(function() {
                     showComments.attr("collapsed", "true");
                     commentDisplay.slideToggle("200");
 
-                    // Scroll to top of the section
-                    $('html, body').animate({
-                        scrollTop: (commentDisplay.prev().offset().top -67.5)
-                    }, 500);
+                    if (formWasClosed === false) {
+                        // Scroll to top of the section
+                        $('html, body').animate({
+                            scrollTop: (commentDisplay.prev().offset().top -67.5)
+                        }, 500);
+                    } else {
+                        $('html, body').animate({
+                            scrollTop: (commentDisplay.prev().offset().top -260)
+                        }, 500);
+                    }
                 }
 
                 // Extract the comment data in a loop
